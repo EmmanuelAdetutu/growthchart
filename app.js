@@ -3,7 +3,7 @@ var app = express();
 
 app.get('/growthchart/plant', function(req, res) {
   res.send({
-    "Output": "Hello From Gorgeous Backend! (Get Data Acknowledge)"
+    "Output": "Hello From Gorgeous Backend! (Get Data Acknowledge)!"
   });
 });
 
