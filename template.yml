@@ -41,12 +41,12 @@ Resources:
         GetEvent:
           Type: Api
           Properties:
-            Path: /
+            Path: /growthchart/plant
             Method: get
         PostEvent:
           Type: Api
           Properties:
-            Path: /
+            Path: /growthchart/plant
             Method: post
   LambdaExecutionRole:
     Description: Creating service role in IAM for AWS Lambda

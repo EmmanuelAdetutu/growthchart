@@ -1,15 +1,15 @@
 var express = require('express');
 var app = express();
 
-app.get('/', function(req, res) {
+app.get('/growthchart/plant', function(req, res) {
   res.send({
-    "Output": "Hello World!"
+    "Output": "Hello From Gorgeous Backend! (Get Data Acknowledge)"
   });
 });
 
-app.post('/', function(req, res) {
+app.post('/growthchart/plant', function(req, res) {
   res.send({
-    "Output": "Hello World!"
+    "Output": "Hello From Gorgeous Backend! (Post Data Acknowledge)!"
   });
 });
 
