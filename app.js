@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser')
 
+app.use(bodyParser.json())
 app.get('/growthchart/plant', function(req, res) {
   res.send({
     "Output": "Hello From Gorgeous Backend! (Get Data Acknowledge)!"
@@ -8,6 +10,7 @@ app.get('/growthchart/plant', function(req, res) {
 });
 
 app.post('/growthchart/plant', function(req, res) {
+  console.log(req.body)
   res.send({
     "Output": "Hello From Gorgeous Backend! (Post Data Acknowledge)!"
   });
