@@ -5,14 +5,14 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.get('/growthchart/plant', function(req, res) {
   res.send({
-    "Output": "Hello From Gorgeous Backend! (Get Data Acknowledge)!"
+    "Output": "Hello From Gorgeous Backend! (Get Data Acknowledge2)!"
   });
 });
 
 app.post('/growthchart/plant', function(req, res) {
   console.log(req.body)
   res.send({
-    "Output": "Hello From Gorgeous Backend! (Post Data Acknowledge)!"
+    "Output": "Hello From Gorgeous Backend! (Post Data Acknowledge2)!"
   });
 });
 
