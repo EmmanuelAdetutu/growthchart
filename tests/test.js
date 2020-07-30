@@ -7,7 +7,7 @@ const app = require('../app.js');
 const request = supertest(app);
 
 describe('Tests app', function() {
-  it('verifies get', function(done) {
+  it.only('verifies get', function(done) {
     request.get('/growthchart/plant').expect(200).end(function(err, result) {
         test.string(result.body.Output).contains('Hello');
         test.value(result).hasHeader('content-type', 'application/json; charset=utf-8');
@@ -16,7 +16,7 @@ describe('Tests app', function() {
   });
   it('verifies post', function(done) {
     request.post('/growthchart/plant').expect(200).end(function(err, result) {
-        test.string(result.body.Output).contains('Hello');
+        test.string(result.body.Output).contains('S');
         test.value(result).hasHeader('content-type', 'application/json; charset=utf-8');
         done(err);
     });
