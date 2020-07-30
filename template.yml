@@ -26,8 +26,10 @@ Globals:
       Type: Canary10Percent5Minutes
       Role: !Ref CodeDeployRole
 
+
 Resources:
-  Growthchart:
+# lambda
+  GrowthchartLambda:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-Growthchart'
@@ -36,6 +38,11 @@ Resources:
       Environment:
         Variables:
           NODE_ENV: production
+          plantsTable: !Sub 'awscodestar-${ProjectId}-plantstable-Growthchart'
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName:
+              !Sub 'awscodestar-${ProjectId}-plantstable-Growthchart'
       Role:
         Fn::GetAtt:
         - LambdaExecutionRole
@@ -51,6 +58,25 @@ Resources:
           Properties:
             Path: /growthchart/plant
             Method: post
+  # Tables
+  PlantTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub 'awscodestar-${ProjectId}-plantstable-Growthchart'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: plantId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: plantId
+          KeyType: HASH
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+      SSESpecification:
+        SSEEnabled: true
+  # Roles
   LambdaExecutionRole:
     Description: Creating service role in IAM for AWS Lambda
     Type: AWS::IAM::Role
