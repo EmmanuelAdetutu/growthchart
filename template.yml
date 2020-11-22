@@ -18,35 +18,33 @@ Parameters:
     Description: The name for a project pipeline stage, such as Staging or Prod, for which resources are provisioned and deployed.
     Default: 'dev'
 
-Globals:
-  Function:
-    AutoPublishAlias: live
-    DeploymentPreference:
-      Enabled: true
-      Type: Canary10Percent5Minutes
-      Role: !Ref CodeDeployRole
-
 
 Resources:
 # lambda
   GrowthchartLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-Growthchart'
-      Handler: index.handler
+      Handler: src/controller/index.handler
       Runtime: nodejs12.x
+      Timeout: 300
+      MemorySize: 256
       Environment:
         Variables:
           NODE_ENV: production
-          plantsTable: !Sub 'awscodestar-${ProjectId}-plantstable-Growthchart'
+          plantsTable: !Sub '${ProjectId}-plants-table'
       Policies:
-        - DynamoDBCrudPolicy:
-            TableName:
-              !Sub 'awscodestar-${ProjectId}-plantstable-Growthchart'
-      Role:
-        Fn::GetAtt:
-        - LambdaExecutionRole
-        - Arn
+        Statement:
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:UpdateItem
+            - dynamodb:PutItem
+            - dynamodb:BatchGetItem
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:BatchWriteItem
+          Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ProjectId}-plants-table"
+
       Events:
         GetEvent:
           Type: Api
@@ -76,19 +74,10 @@ Resources:
         StreamViewType: NEW_IMAGE
       SSESpecification:
         SSEEnabled: true
-  # Roles
-  LambdaExecutionRole:
-    Description: Creating service role in IAM for AWS Lambda
-    Type: AWS::IAM::Role
+  PlantDataTable:
+    Type: AWS::Serverless::SimpleTable
     Properties:
-      RoleName: !Sub 'CodeStar-${ProjectId}-Execution'
-      AssumeRolePolicyDocument:
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service: [lambda.amazonaws.com]
-          Action: sts:AssumeRole
-      Path: /
-      ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-      PermissionsBoundary: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/CodeStar_${ProjectId}_PermissionsBoundary'
+      PrimaryKey:
+        Name: plantId
+        Type: String
+      TableName: !Sub "${ProjectId}-plants-table"
