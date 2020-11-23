@@ -3,14 +3,12 @@ var app = express();
 var bodyParser = require('body-parser');
 
 const { putDataToDynamo } = require('./dataToDynamo');
-
+const {getDataFromDynamo}= require('./dataFromDynamo')
 
 app.use(bodyParser.json())
 
 app.get('/growthchart/plant', function (req, res) {
-  res.send({
-    "Output": "Hello From Gorgeous Backend! (Get Data Acknowledge3)!"
-  });
+  getDataFromDynamo(req,res)
 });
 app.post('/growthchart/plant', function (req, res) {
   putDataToDynamo(req, res)

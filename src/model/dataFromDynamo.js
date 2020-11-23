@@ -2,36 +2,35 @@
 const AWS = require('aws-sdk');
 AWS.config.update({ region: 'eu-central-1' });
 const ddb = new AWS.DynamoDB.DocumentClient();
-
 const {logger}=require('../helper/logger')
 
-async function putDataToDynamo(req, res) {
+async function getDataFromDynamo(req, res) {
   try {
-    const params = {
+    var params = {
       TableName: process.env.plantsTable,
-      Item: {
-        plantid: req.body.plantid,
-        plantHeight: req.body.plantHeight,
-        leaveCount: req.body.leaveCount,
-        plantData:{
-          datePlanted:"ghtjkd",
-          plantLocation:"46377N,32892S"
-        }
-      }
+      ReturnConsumedCapacity: "TOTAL"
     };
-    await ddb.put(params).promise();
+    let scanResults = [];
+    let items;
+
+    items = await ddb.scan(params).promise();
+    const array = items.Items
+    for (let index = 0; index < array.length; index++) {
+      const element = array[index];
+      scanResults.push(element);
+    }
     logger.info({
       type: 'Success',
-      operation: 'put-Data-To-Dynamo',
+      operation: 'get-Data-From-Dynamo',
       reqBody: req.body
     });
     res.statusCode = 200;
-    res.send('Success plant data stored. ');
+    res.send(scanResults);
 
   } catch (error) {
     logger.error({
       type: 'Failure',
-      operation: 'put-Data-To-Dynamo',
+      operation: 'get-Data-From-Dynamo',
       reqBody: req.body,
       error: {
         message: error.message ? error.message : JSON.stringify(error),
@@ -39,10 +38,10 @@ async function putDataToDynamo(req, res) {
       }
     });
     res.statusCode = 500;
-    res.send('Failed plant data not stored');
+    res.send('Failed to get plants data !!');
   }
 }
 
 module.exports = {
-  putDataToDynamo
+  getDataFromDynamo
 }

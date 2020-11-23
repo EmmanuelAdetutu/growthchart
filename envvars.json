@@ -1,6 +1,6 @@
 {
     "GrowthchartLambda":{
       "NODE_ENV":"production",
-      "plantsTable":"awscodestar-growthchart-plantstable-Growthchart"
+      "plantsTable":"test-growth-chart-table"
     }
   }

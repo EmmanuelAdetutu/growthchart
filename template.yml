@@ -43,7 +43,9 @@ Resources:
             - dynamodb:Query
             - dynamodb:Scan
             - dynamodb:BatchWriteItem
-          Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ProjectId}-plants-table"
+          Resource:
+            - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ProjectId}-plants-table"
+            - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ProjectId}-plantstable-Growthchart"
 
       Events:
         GetEvent:
@@ -60,7 +62,7 @@ Resources:
   PlantTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub 'awscodestar-${ProjectId}-plantstable-Growthchart'
+      TableName: !Sub '${ProjectId}-plantstable-Growthchart'
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: plantId
