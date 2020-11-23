@@ -10,13 +10,9 @@ async function putDataToDynamo(req, res) {
     const params = {
       TableName: process.env.plantsTable,
       Item: {
-        plantid: req.body.plantid,
-        plantHeight: req.body.plantHeight,
-        leaveCount: req.body.leaveCount,
-        plantData:{
-          datePlanted:"ghtjkd",
-          plantLocation:"46377N,32892S"
-        }
+        plantId: req.body.plantId,
+        periodData: req.body.periodData,
+        plantData: req.body.plantData
       }
     };
     await ddb.put(params).promise();
