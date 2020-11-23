@@ -44,8 +44,7 @@ Resources:
             - dynamodb:Scan
             - dynamodb:BatchWriteItem
           Resource:
-            - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ProjectId}-plants-table"
-            - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ProjectId}-plantstable-Growthchart"
+            - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ProjectId}-plantstable"
 
       Events:
         GetEvent:
@@ -62,7 +61,7 @@ Resources:
   PlantTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub '${ProjectId}-plantstable-Growthchart'
+      TableName: !Sub '${ProjectId}-plantstable'
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: plantId
@@ -76,10 +75,3 @@ Resources:
         StreamViewType: NEW_IMAGE
       SSESpecification:
         SSEEnabled: true
-  PlantDataTable:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      PrimaryKey:
-        Name: plantId
-        Type: String
-      TableName: !Sub "${ProjectId}-plants-table"

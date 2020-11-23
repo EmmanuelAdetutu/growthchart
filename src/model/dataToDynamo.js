@@ -11,6 +11,7 @@ async function putDataToDynamo(req, res) {
       TableName: process.env.plantsTable,
       Item: {
         plantId: req.body.plantId,
+        seedlingId: req.body.seedlingId,
         periodData: req.body.periodData,
         plantData: req.body.plantData
       }
